@@ -1,0 +1,141 @@
+import random
+import math
+
+# --- Question Bank and Generation ---
+
+def generate_algebra_question():
+    """Generates a quadratic equation question: ax^2 + bx + c = 0"""
+    a = 1
+    # Generate two distinct integer roots for simplicity
+    root1 = random.randint(-5, 5)
+    root2 = random.randint(-4, 4)
+    while root1 == root2:
+        root2 = random.randint(-4, 4)
+
+    # Calculate coefficients b and c from roots (x - r1)(x - r2) = x^2 - (r1+r2)x + r1*r2
+    b = -(root1 + root2)
+    c = root1 * root2
+    
+    question = f"Find one of the roots of the quadratic equation: x^2 + {b}x + {c} = 0"
+    # The answer can be either root
+    answer = (root1, root2)
+    return question, answer
+
+def generate_trigonometry_question():
+    """Generates a basic trigonometry question."""
+    angle = random.choice([0, 30, 45, 60, 90])
+    func = random.choice(['sin', 'cos', 'tan'])
+    
+    question = f"What is the value of {func}({angle} degrees)?"
+    
+    # Calculate the answer
+    if func == 'sin':
+        answer = round(math.sin(math.radians(angle)), 2)
+    elif func == 'cos':
+        answer = round(math.cos(math.radians(angle)), 2)
+    else: # tan
+        if angle == 90:
+            return "What is the value of tan(90 degrees)?", "undefined"
+        answer = round(math.tan(math.radians(angle)), 2)
+        
+    return question, answer
+
+def generate_ap_question():
+    """Generates an Arithmetic Progression question to find the nth term."""
+    a = random.randint(1, 10)  # First term
+    d = random.randint(2, 5)   # Common difference
+    n = random.randint(5, 10)  # Which term to find
+    
+    question = f"In an Arithmetic Progression, the first term (a) is {a} and the common difference (d) is {d}. What is the {n}th term?"
+    # Formula: an = a + (n-1)d
+    answer = a + (n - 1) * d
+    return question, answer
+
+# --- Core Game Logic ---
+
+def get_question():
+    """Selects a topic and returns a question-answer pair."""
+    question_generators = [
+        generate_algebra_question,
+        generate_trigonometry_question,
+        generate_ap_question
+    ]
+    # Pick a random function from the list and call it
+    selected_generator = random.choice(question_generators)
+    return selected_generator()
+
+def run_quiz():
+    """Manages the main quiz session."""
+    print("\n--- Starting the Maths Quiz! ---")
+    score = 0
+    total_questions = 5  # You can change the number of questions
+
+    for i in range(total_questions):
+        question, correct_answer = get_question()
+        print(f"\nQuestion {i+1}/{total_questions}: {question}")
+        
+        user_input = input("Your answer: ").strip().lower()
+
+        # --- Answer Checking Logic ---
+        is_correct = False
+        try:
+            # Handle algebra questions with two possible roots
+            if isinstance(correct_answer, tuple):
+                user_answer_float = float(user_input)
+                if user_answer_float in correct_answer:
+                    is_correct = True
+            # Handle trigonometry "undefined" case
+            elif isinstance(correct_answer, str) and correct_answer == "undefined":
+                if user_input == "undefined":
+                    is_correct = True
+            # Handle standard numeric answers
+            else:
+                user_answer_float = float(user_input)
+                if math.isclose(user_answer_float, float(correct_answer)):
+                    is_correct = True
+        except ValueError:
+            print("Invalid input. Please enter a number or 'undefined'.")
+
+        # --- Feedback ---
+        if is_correct:
+            print("Correct! Well done.")
+            score += 1
+        else:
+            print(f"Sorry, that's not right. The correct answer was {correct_answer}.")
+
+    print("\n--- Quiz Finished! ---")
+    print(f"Your final score is: {score}/{total_questions}")
+    if score == total_questions:
+        print("Excellent work! You got a perfect score!")
+    elif score >= total_questions / 2:
+        print("Good job! Keep practicing.")
+    else:
+        print("Keep trying! Practice makes perfect.")
+
+# --- Main Menu ---
+
+def main():
+    """The main function to run the application."""
+    print("=============================================")
+    print(" Welcome to the Interactive Maths Quiz Game! ")
+    print("=============================================")
+    
+    while True:
+        print("\nMain Menu:")
+        print("1. Start a New Quiz")
+        print("2. Exit")
+        
+        choice = input("Please select an option (1-2): ").strip()
+        
+        if choice == '1':
+            run_quiz()
+        elif choice == '2':
+            print("Thank you for playing. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+
+# --- Execution Start ---
+
+if __name__ == "__main__":
+    main()
