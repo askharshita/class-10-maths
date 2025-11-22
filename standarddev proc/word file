@@ -1,0 +1,43 @@
+Structured Development Process
+This document outlines the steps followed in developing the quiz game.
+1. Problem Definition
+The goal was to build an interactive command-line quiz application that meets the following criteria:
+•	Contains 10 questions.
+•	Provides a scoring system that tracks performance throughout the quiz.
+2. Requirement Analysis
+The functional requirements identified for the application were:
+•	Display a greeting and ask the user if they wish to start the quiz.
+•	Begin only if the user responds “yes.”
+•	Present 10 multiple-choice questions, one at a time.
+•	Prompt the user to enter an answer (a, b, c, or d).
+•	Validate the answer and give immediate feedback (Correct/Incorrect).
+•	Maintain a running score.
+•	Show the final score at the end of the quiz.
+3. Top-Down Design / Modularization
+To ensure clarity and maintainability, the program was divided into functions:
+•	main(): Entry point of the program. Handles the welcome message, start prompt, and calls the quiz function.
+•	run_quiz(): Core function containing the question data, quiz loop, input handling, answer validation, and score calculation.
+This modular approach separates the quiz logic from the overall program flow.
+4. Algorithm Development
+•	Data Structure: A list of dictionaries was used to store questions. Each dictionary includes the question text, available options, and the correct answer.
+•	Program Flow:
+1.	Start in main().
+2.	Prompt the user to begin. Exit if “no,” otherwise call run_quiz().
+3.	Initialize score = 0.
+4.	Loop through the list of questions.
+5.	Display the question and options.
+6.	Use a loop to validate input (must be a, b, c, or d).
+7.	Compare input with the correct answer.
+8.	Provide feedback and update score if correct.
+9.	After all questions, display the final score.
+5. Implementation
+•	Language: Python 3.
+•	Libraries: sys was used for clean program exit if the user chooses not to play.
+•	Input Handling: User input is converted to lowercase and stripped of whitespace to handle variations like “Yes,” “ yes,” or “A.”
+6. Testing and Refinement
+The application was tested manually to confirm all requirements were met:
+•	Start Prompt: Tested with “yes,” “no,” “YES,” “ no ”, and invalid inputs.
+•	Answer Validation: Checked with correct answers, incorrect answers, and invalid inputs (e.g., “e,” “hello”).
+•	Scoring: Verified by completing the quiz with known correct answers.
+•	Refinement: Improved feedback messages by showing the correct answer when the user was wrong.
+ 
